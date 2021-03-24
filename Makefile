@@ -61,8 +61,15 @@ test_environment:
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
+TEST_PATH=./
 
+clean-pyc:
+    find . -name '*.pyc' -exec rm --force {} +
+    find . -name '*.pyo' -exec rm --force {} +
+    name '*~' -exec rm --force  {}
 
+test: clean-pyc
+    py.test --verbose --color=yes $(TEST_PATH)
 
 #################################################################################
 # Self Documenting Commands                                                     #
