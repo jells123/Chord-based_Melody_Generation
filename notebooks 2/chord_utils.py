@@ -23,13 +23,26 @@ def get_raw_Xy_chords(chords_translated, CHORDS_WINDOW, add_start_end=True):
     assert len(X_raw) == len(y_raw) == len(row_to_song_idx_map)
     return X_raw, y_raw, row_to_song_idx_map
 
-def get_chords_CountVectorizer(chords_translated, add_start_end=True):
+def get_chords_CountVectorizer(chords_translated, add_start_end=True, count_vectorizer_kwargs={}):
     if add_start_end:
-        chords_flat = [ch.split('_')[0] for chords in chords_translated for ch in ["START", *chords, "END"]]
+        chords_flat = [
+            ch.split('_')[0] 
+            for chords in chords_translated 
+            for ch in ["START", *chords, "END"]
+        ]
     else:
-        chords_flat = [ch.split('_')[0] for chords in chords_translated for ch in chords]
+        chords_flat = [
+            ch.split('_')[0] 
+            for chords in chords_translated 
+            for ch in chords
+        ]
 
-    vectorizer = CountVectorizer(lowercase=False, preprocessor=lambda x : x, tokenizer=lambda x : x.split())
+    vectorizer = CountVectorizer(
+        **count_vectorizer_kwargs
+#         lowercase=False, 
+#         preprocessor=lambda x : x, 
+#         tokenizer=lambda x : x.split()
+    )
     vectorizer.fit(chords_flat)
     
     print('Created vocabulary: ')
